@@ -1,0 +1,298 @@
+{
+	"info": {
+		"_postman_id": "ecommerce-rest-api",
+		"name": "E-commerce REST API",
+		"description": "Collection for testing E-commerce REST API endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"url": "http://localhost:8080/api/products"
+					}
+				},
+				{
+					"name": "Get Product by ID",
+					"request": {
+						"method": "GET",
+						"url": "http://localhost:8080/api/products/1"
+					}
+				},
+				{
+					"name": "Create Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.collectionVariables.set(\"productId\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set('timestamp', new Date().getTime());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"url": "http://localhost:8080/api/products",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Product {{timestamp}}\",\n    \"description\": \"{{$randomProductDescription}}\",\n    \"price\": {{$randomPrice}},\n    \"stockQuantity\": {{$randomInt}}\n}"
+						}
+					}
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"url": "http://localhost:8080/api/products/{{productId}}",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Product {{$timestamp}}\",\n    \"description\": \"{{$randomProductDescription}}\",\n    \"price\": {{$randomPrice}},\n    \"stockQuantity\": {{$randomInt}}\n}"
+						}
+					}
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"url": "http://localhost:8080/api/products/{{productId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Get All Customers",
+					"request": {
+						"method": "GET",
+						"url": "http://localhost:8080/api/customers"
+					}
+				},
+				{
+					"name": "Get Customer by ID",
+					"request": {
+						"method": "GET",
+						"url": "http://localhost:8080/api/customers/{{customerId}}"
+					}
+				},
+				{
+					"name": "Create Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.collectionVariables.set(\"customerId\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"url": "http://localhost:8080/api/customers",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"address\": \"{{$randomStreetAddress}}, {{$randomCity}}\",\n    \"phone\": \"+1-{{$randomPhoneNumber}}\"\n}"
+						}
+					}
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"method": "PUT",
+						"url": "http://localhost:8080/api/customers/{{customerId}}",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"address\": \"{{$randomStreetAddress}}, {{$randomCity}}\",\n    \"phone\": \"+1-{{$randomPhoneNumber}}\"\n}"
+						}
+					}
+				},
+				{
+					"name": "Delete Customer",
+					"request": {
+						"method": "DELETE",
+						"url": "http://localhost:8080/api/customers/{{customerId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Get All Orders",
+					"request": {
+						"method": "GET",
+						"url": "http://localhost:8080/api/orders"
+					}
+				},
+				{
+					"name": "Get Order by ID",
+					"request": {
+						"method": "GET",
+						"url": "http://localhost:8080/api/orders/{{orderId}}"
+					}
+				},
+				{
+					"name": "Create Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.collectionVariables.set(\"orderId\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"url": "http://localhost:8080/api/orders",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customer\": {\n        \"id\": {{customerId}}\n    },\n    \"products\": [\n        {\n            \"id\": {{productId}}\n        }\n    ],\n    \"totalAmount\": {{$randomPrice}}\n}"
+						}
+					}
+				},
+				{
+					"name": "Update Order",
+					"request": {
+						"method": "PUT",
+						"url": "http://localhost:8080/api/orders/{{orderId}}",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customer\": {\n        \"id\": {{customerId}}\n    },\n    \"products\": [\n        {\n            \"id\": {{productId}}\n        }\n    ],\n    \"status\": \"PROCESSING\",\n    \"totalAmount\": {{$randomPrice}}\n}"
+						}
+					}
+				},
+				{
+					"name": "Update Order Status",
+					"request": {
+						"method": "PUT",
+						"url": "http://localhost:8080/api/orders/{{orderId}}/status",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\"{{randomOrderStatus}}\""
+						}
+					}
+				},
+				{
+					"name": "Delete Order",
+					"request": {
+						"method": "DELETE",
+						"url": "http://localhost:8080/api/orders/{{orderId}}"
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "customerId",
+			"value": ""
+		},
+		{
+			"key": "productId",
+			"value": ""
+		},
+		{
+			"key": "orderId",
+			"value": ""
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Custom random price function",
+					"pm.variables.set('randomPrice', (Math.random() * 1000).toFixed(2));",
+					"",
+					"// Custom random phone number",
+					"pm.variables.set('randomPhoneNumber', Math.floor(Math.random() * 900 + 100) + '-' + Math.floor(Math.random() * 900 + 100) + '-' + Math.floor(Math.random() * 9000 + 1000));",
+					"",
+					"// Custom random product description",
+					"const descriptions = [",
+					"    'High-quality product with premium features',",
+					"    'Durable and long-lasting item',",
+					"    'Best-selling product in its category',",
+					"    'Perfect for everyday use',",
+					"    'Innovative design with modern features',",
+					"    'Eco-friendly and sustainable product',",
+					"    'Limited edition collector\\'s item',",
+					"    'Award-winning design and functionality'",
+					"];",
+					"pm.variables.set('randomProductDescription', descriptions[Math.floor(Math.random() * descriptions.length)]);",
+					"",
+					"// Random order status",
+					"const orderStatuses = ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'COMPLETED'];",
+					"pm.variables.set('randomOrderStatus', orderStatuses[Math.floor(Math.random() * orderStatuses.length)]);"
+				]
+			}
+		}
+	]
+}
