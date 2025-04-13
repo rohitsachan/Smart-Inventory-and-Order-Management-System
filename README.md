@@ -1,8 +1,3 @@
-Sure! Here's the full content of the **Project Requirement Document** in Markdown format, ready to be saved as a `.md` file (e.g., `smart-inventory-order-management-prd.md`):
-
----
-
-```markdown
 # 📝 Smart Inventory and Order Management System - Project Requirement Document
 
 ## 📌 Project Title
